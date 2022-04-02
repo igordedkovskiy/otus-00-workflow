@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PATCH_VERSION "3" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
 #find_package(GTest REQUIRED)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+#find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+#option(WITH_GTEST "Whether to build google test" ON)
 
 configure_file(version.h.in version.h)
 
@@ -48,6 +49,27 @@ if(WITH_BOOST_TEST)
     )
 endif()
 
+#if(WITH_GTEST)
+#    find_package(GTest REQUIRED)
+#    add_executable(test_version_g test_version_g.cpp)
+#    target_include_directories(test_version_g PRIVATE ${GTEST_INCLUDE_DIR})
+
+#    set_target_properties(test_version_g PROPERTIES
+#        CXX_STANDARD 14
+#        CXX_STANDARD_REQUIRED ON
+#    )
+
+##    set_target_properties(test_version_g PROPERTIES
+##        INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
+##    )
+
+#    target_link_libraries(test_version_g
+#        ${GTEST_LIBRARY_DEBUG}
+#        ${GTEST_MAIN_LIBRARY_DEBUG}
+#        helloworld
+#    )
+#endif()
+
 if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
         /W4
@@ -60,6 +82,11 @@ if (MSVC)
             /W4
         )
     endif()
+#    if(WITH_GTEST)
+#        target_compile_options(test_version_g PRIVATE
+#            /W4
+#        )
+#    endif()
 else ()
     target_compile_options(helloworld_cli PRIVATE
         -Wall -Wextra -pedantic -Werror
@@ -72,6 +99,11 @@ else ()
             -Wall -Wextra -pedantic -Werror
         )
     endif()
+#    if(WITH_GTEST)
+#        target_compile_options(test_version_g PRIVATE
+#            -Wall -Wextra -pedantic -Werror
+#        )
+#    endif()
 endif()
 
 install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
@@ -87,3 +119,8 @@ if(WITH_BOOST_TEST)
     enable_testing()
     add_test(test_version test_version)
 endif()
+
+#if(WITH_GTEST)
+#    enable_testing()
+#    add_test(test_version_g test_version_g)
+#endif()
