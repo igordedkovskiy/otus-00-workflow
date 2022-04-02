@@ -13,7 +13,7 @@ option(WITH_BOOST_TEST "Whether to build Boost test" ON)
 configure_file(version.h.in version.h)
 
 add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
+add_library(helloworld lib.cpp lib.h)
 
 set_target_properties(helloworld_cli helloworld PROPERTIES
     CXX_STANDARD 14
