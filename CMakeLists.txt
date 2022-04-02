@@ -5,6 +5,9 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
+#find_package(GTest REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+
 option(WITH_BOOST_TEST "Whether to build Boost test" ON)
 
 configure_file(version.h.in version.h)
